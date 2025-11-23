@@ -147,9 +147,13 @@ const callGeminiAPI = async (apiKey, prompt) => {
 // --- Components ---
 
 const PwCLogo = () => (
-    <svg width="40" height="40" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <path d="M20 0C8.9543 0 0 8.9543 0 20C0 31.0457 8.9543 40 20 40C31.0457 40 40 31.0457 40 20C40 8.9543 31.0457 0 20 0ZM28.2843 14.1421L21.2132 21.2132L14.1421 28.2843L11.3137 25.4558L18.3848 18.3848L25.4558 11.3137L28.2843 14.1421ZM10 20C10 14.4772 14.4772 10 20 10C25.5228 10 30 14.4772 30 20C30 25.5228 25.5228 30 20 30C14.4772 30 10 25.5228 10 20ZM18.3848 11.3137L11.3137 18.3848L18.3848 25.4558L25.4558 18.3848L18.3848 11.3137Z" fill={THEME_COLOR}/>
-    </svg>
+  <svg width="40" height="24" viewBox="0 0 100 60" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Brand">
+    <g fill="#D93900">
+      <polygon points="0,50 20,50 40,10 20,10"/>
+      <polygon points="30,50 50,50 70,10 50,10"/>
+      <polygon points="60,50 80,50 100,10 80,10"/>
+    </g>
+  </svg>
 );
 
 // --- Helper Functions for Tax Calculation ---
@@ -321,7 +325,7 @@ const Navigation = ({ activeStep, setStep, openSettings, fillDemo }) => {
           <div className="flex flex-col">
             {/* Short title for all sizes as requested */}
             <span className="font-bold text-xl text-gray-800 tracking-tight pl-4 leading-none">
-              CRS AI Workflow
+              PwC CRS AI Workflow
             </span>
             <span className="text-[10px] text-green-600 font-medium pl-4 mt-1 flex items-center gap-1 hidden md:flex">
               <Lock size={10} /> Secure Workflow V1.4
