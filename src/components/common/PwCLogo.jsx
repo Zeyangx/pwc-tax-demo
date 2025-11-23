@@ -5,7 +5,7 @@ const PwCLogo = () => (
   <img 
     src={logoSrc} 
     alt="PwC Logo" 
-    className="h-17 w-auto object-contain"
+    className="h-13 w-auto object-contain"
   />
 );
 
