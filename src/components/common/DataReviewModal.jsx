@@ -12,14 +12,36 @@ const DataReviewModal = ({ isOpen, onClose, aiData, onConfirm }) => {
         setEditedData(prev => ({...prev, [key]: val}));
     };
 
+    // --- 全量字段映射表 (必须包含 AI 提取的所有 Key) ---
     const fieldLabels = {
+        // 1. 身份
         daysInChina: "境内居住天数 (2024)",
+        name: "客户姓名",
+        nationality: "国籍/地区",
+
+        // 2. 收入详情
         salary: "工资薪金 (RMB)",
-        otherIncome: "境外所得 (RMB)",
+        labor: "劳务报酬 (RMB)",
+        author: "稿酬所得 (RMB)",
+        royalty: "特许权使用费 (RMB)",
+        interest: "利息收入 (Interest)",
+        dividend: "股息红利 (Dividend)",
+        propertyTransferIncome: "财产转让收入 (Sold)",
+        propertyTransferCost: "财产转让成本 (Cost)",
+        otherIncome: "其他境外所得",
+
+        // 3. 税额详情
         taxPaid: "已缴纳税额 (RMB)",
+        taxPaidCountry: "税款缴纳地 (Source)",
+        taxPaidYear: "税款所属年度 (Year)",
+        taxDeductible: "是否符合抵扣条件",
+
+        // 4. CRS 风险
         crs_trust: "海外信托架构",
-        crs_passiveNFE: "消极非金融机构 (BVI)",
-        crs_foreignBank: "境外金融账户"
+        crs_passiveNFE: "消极非金融机构 (BVI/Cayman)",
+        crs_foreignBank: "境外金融账户",
+        crs_insurance: "大额保单/年金",
+        crs_otherResidency: "双重税务居民身份"
     };
 
     return (
@@ -28,16 +50,18 @@ const DataReviewModal = ({ isOpen, onClose, aiData, onConfirm }) => {
                 <div className="p-5 border-b border-gray-100 flex justify-between items-center bg-orange-50">
                     <div>
                         <h3 className="text-lg font-bold text-gray-800 flex items-center">
-                            <Sparkles className="mr-2 w-5 h-5 text-orange-600"/> Gemini AI 提取结果确认
+                            <Sparkles className="mr-2 w-5 h-5 text-orange-600"/> Gemini AI 智能提取结果
                         </h3>
-                        <p className="text-xs text-gray-500">AI 已从原始数据中提取以下关键信息，请人工复核：</p>
+                        <p className="text-xs text-gray-500">AI 已综合分析录音与凭证，提取以下关键信息：</p>
                     </div>
                     <button onClick={onClose} className="text-gray-400 hover:text-gray-600">✕</button>
                 </div>
                 
                 <div className="p-6 grid grid-cols-1 gap-4">
                     {Object.keys(editedData).map(key => {
+                        // 如果 AI 返回了奇怪的字段，这里会过滤掉
                         if (!fieldLabels[key]) return null;
+                        
                         const isBool = typeof editedData[key] === 'boolean';
                         return (
                             <div key={key} className="flex items-center justify-between border-b border-gray-100 pb-3">
@@ -54,7 +78,12 @@ const DataReviewModal = ({ isOpen, onClose, aiData, onConfirm }) => {
                                                 onChange={(e) => handleChange(key, e.target.checked)}
                                                 className="w-5 h-5 text-orange-600 rounded focus:ring-orange-500"
                                             />
-                                            <span className="text-sm text-gray-600">{editedData[key] ? "检测到风险 / 存在" : "无"}</span>
+                                            <span className="text-sm text-gray-600">
+                                                {key === 'taxDeductible' 
+                                                    ? (editedData[key] ? "是 (可抵扣)" : "否 (不可抵扣)")
+                                                    : (editedData[key] ? "检测到风险 / 存在" : "无")
+                                                }
+                                            </span>
                                         </div>
                                     ) : (
                                         <input 
