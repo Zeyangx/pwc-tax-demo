@@ -6,13 +6,16 @@ const Step2Analysis = ({ data, onNext }) => {
   const [progress, setProgress] = useState(0);
   const [status, setStatus] = useState("正在初始化AI引擎...");
 
+  // 获取 2024 年天数 (适配新结构)
+  const days2024 = data.taxResidency?.['2024']?.daysInChina || 0;
+
   useEffect(() => {
     const stages = [
       { pct: 10, msg: "正在连接税务法规数据库 (2024版)..." },
-      { pct: 30, msg: "分析居民纳税身份 (基于183天规则)..." },
-      { pct: 50, msg: "计算综合所得与适用税率..." },
+      { pct: 30, msg: `分析居民纳税身份 (2024年居住 ${days2024} 天)...` },
+      { pct: 50, msg: "计算综合所得与境外抵免限额..." },
       { pct: 70, msg: "穿透识别 CRS 架构 (信托/壳公司)..." },
-      { pct: 85, msg: "整合用户自述与合规建议..." },
+      { pct: 85, msg: "生成合规风险评估报告..." },
       { pct: 100, msg: "分析完成" }
     ];
 
@@ -29,7 +32,7 @@ const Step2Analysis = ({ data, onNext }) => {
     }, 800);
 
     return () => clearInterval(interval);
-  }, [onNext]);
+  }, [onNext, days2024]);
 
   return (
     <div className="max-w-2xl mx-auto pt-20 text-center px-4 animate-fade-in">
@@ -48,9 +51,9 @@ const Step2Analysis = ({ data, onNext }) => {
       
       <div className="grid grid-cols-3 gap-4 mt-12 text-left">
         {[
-            { title: "居民身份", icon: User },
-            { title: "税款测算", icon: Calculator },
-            { title: "CRS扫描", icon: Globe },
+            { title: "居民身份判定", icon: User },
+            { title: "税款与抵免测算", icon: Calculator },
+            { title: "CRS 穿透扫描", icon: Globe },
         ].map((item, i) => (
             <div key={i} className={`p-4 border rounded-lg flex items-center space-x-3 transition-opacity duration-500 ${progress > (i + 1) * 30 ? 'opacity-100 border-green-500 bg-green-50' : 'opacity-40 border-gray-200'}`}>
                 {progress > (i + 1) * 30 ? <CheckCircle className="w-5 h-5 text-green-600" /> : <item.icon className="w-5 h-5 text-gray-400"/>}
